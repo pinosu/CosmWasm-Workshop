@@ -28,12 +28,19 @@ pub fn instantiate(
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn execute(
-    _deps: DepsMut,
+    deps: DepsMut,
     _env: Env,
     _info: MessageInfo,
-    _msg: ExecuteMsg,
+    msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
-    unimplemented!()
+    COUNTER.update::<_, ContractError>(deps.storage, |old_value| {
+        Ok(match msg {
+            ExecuteMsg::Inc => old_value.saturating_add(1),
+            ExecuteMsg::Dec => old_value.saturating_sub(1),
+            ExecuteMsg::Set(new_value) => new_value,
+        })
+    })?;
+    Ok(Response::default())
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
