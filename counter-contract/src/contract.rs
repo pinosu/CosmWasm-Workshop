@@ -5,21 +5,25 @@ use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult}
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
+use cw_storage_plus::Item;
 
-/*
-// version info for migration info
-const CONTRACT_NAME: &str = "crates.io:counter-contract";
-const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
-*/
+const COUNTER: Item<u8> = Item::new("value");
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn instantiate(
-    _deps: DepsMut,
+    deps: DepsMut,
     _env: Env,
     _info: MessageInfo,
-    _msg: InstantiateMsg,
+    msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
-    unimplemented!()
+    COUNTER.save(
+        deps.storage,
+        &match msg {
+            InstantiateMsg::Zero => 0,
+            InstantiateMsg::Set(new_value) => new_value,
+        },
+    )?;
+    Ok(Response::default())
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
