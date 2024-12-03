@@ -19,8 +19,8 @@ pub fn instantiate(
     COUNTER.save(
         deps.storage,
         &match msg {
-            InstantiateMsg::Zero => 0,
-            InstantiateMsg::Set(new_value) => new_value,
+            InstantiateMsg::Zero {} => 0,
+            InstantiateMsg::Set {value} => value,
         },
     )?;
     Ok(Response::default())
@@ -35,9 +35,9 @@ pub fn execute(
 ) -> Result<Response, ContractError> {
     COUNTER.update::<_, ContractError>(deps.storage, |old_value| {
         Ok(match msg {
-            ExecuteMsg::Inc => old_value.saturating_add(1),
-            ExecuteMsg::Dec => old_value.saturating_sub(1),
-            ExecuteMsg::Set(new_value) => new_value,
+            ExecuteMsg::Inc {} => old_value.saturating_add(1),
+            ExecuteMsg::Dec {} => old_value.saturating_sub(1),
+            ExecuteMsg::Set {value} => value,
         })
     })?;
     Ok(Response::default())
@@ -46,7 +46,7 @@ pub fn execute(
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
-        QueryMsg::Value => Ok(to_json_binary(&CounterResponse {
+        QueryMsg::Value {} => Ok(to_json_binary(&CounterResponse {
             value: COUNTER.may_load(deps.storage)?.unwrap(),
         })?),
     }
