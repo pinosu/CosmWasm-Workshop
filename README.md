@@ -139,6 +139,8 @@ cargo install cosmwasm-check
 cosmwasm-check countrer_contract.wasm
 ```
 
+Here you can find the list of built-in capabilities: https://github.com/CosmWasm/cosmwasm/blob/main/docs/CAPABILITIES-BUILT-IN.md
+
 ## Neutron testnet
 
 ### Setup client
