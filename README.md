@@ -129,6 +129,16 @@ docker run --rm -v "$(pwd)":/code   --mount type=volume,source="$(basename "$(pw
 # The artifact will be generated in the ./artifacts directory.
 ```
 
+## Check contract
+Check contract validity and capabilities
+```sh
+# Install cosmwasm-check
+cargo install cosmwasm-check
+
+# Check validity
+cosmwasm-check countrer_contract.wasm
+```
+
 ## Neutron testnet
 
 ### Setup client
